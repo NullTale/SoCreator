@@ -20,9 +20,9 @@ namespace SOCreator
         }
         
         // =======================================================================
-        public SOCreateAttribute(bool visible = true)
+        public SOCreateAttribute(bool visible)
         {
-            Visibility = visible ? Mode.Visible : Mode.Hidden;
+            Visibility = visible ? Mode.AlwaysVisible : Mode.Hidden;
         }
         
         public SOCreateAttribute(Mode visibility)
