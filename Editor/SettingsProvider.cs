@@ -10,11 +10,16 @@ namespace SOCreator
 {
     public class SettingsProvider : UnityEditor.SettingsProvider
     {
-        public const string k_AllAssemblies = nameof(SOCreator) + ".AllAssemblies";
-        public const string k_Width         = nameof(SOCreator) + ".Width";
-        public const string k_MaxItems      = nameof(SOCreator) + ".MaxItems";
-        public const string k_PrefsFile     = nameof(SOCreator) + "Prefs.json";
-        public const string k_PrefsPath     = "ProjectSettings\\" + k_PrefsFile;
+        public const string k_AllAssemblies   = nameof(SOCreator) + ".AllAssemblies";
+        public const string k_Width           = nameof(SOCreator) + ".Width";
+        public const string k_MaxItems        = nameof(SOCreator) + ".MaxItems";
+        public const string k_ShowNamespace   = nameof(SOCreator) + ".ShowNamespace";
+        public const string k_PrefsFile       = nameof(SOCreator) + "Prefs.json";
+        public const string k_PrefsPath       = "ProjectSettings\\" + k_PrefsFile;
+
+        public const bool k_ShowNamespaceDefault = true;
+        public const int  k_WeightDefault        = 320;
+        public const int  k_MaxItemsDefault      = 40;
 
         public static List<AssemblyDefinitionAsset> s_Assemblies;
         
@@ -35,11 +40,14 @@ namespace SOCreator
             if (!EditorPrefs.HasKey(k_AllAssemblies))
                 EditorPrefs.SetBool(k_AllAssemblies, false);
             
+            if (!EditorPrefs.HasKey(k_ShowNamespace))
+                EditorPrefs.SetBool(k_ShowNamespace, k_ShowNamespaceDefault);
+            
             if (!EditorPrefs.HasKey(k_Width))
-                EditorPrefs.SetInt(k_Width, 320);
+                EditorPrefs.SetInt(k_Width, k_WeightDefault);
             
             if (!EditorPrefs.HasKey(k_MaxItems))
-                EditorPrefs.SetInt(k_MaxItems, 40);
+                EditorPrefs.SetInt(k_MaxItems, k_MaxItemsDefault);
         }
         
         [InitializeOnLoadMethod]
@@ -61,9 +69,10 @@ namespace SOCreator
         {
             //EditorGUILayout.ObjectField(null, typeof(AssemblyDefinitionAsset), false);
             EditorGUI.BeginChangeCheck();
-            var allAssambles = EditorGUILayout.Toggle(new GUIContent("All Assemblies", "Search in all assemblies by default"), EditorPrefs.GetBool(k_AllAssemblies));
-            var width        = EditorGUILayout.IntField(new GUIContent("Width", "Window width"), EditorPrefs.GetInt(k_Width));
-            var maxItems     = EditorGUILayout.IntField(new GUIContent("Max items", "Max elements in popup window"), EditorPrefs.GetInt(k_MaxItems));
+            var allAssambles  = EditorGUILayout.Toggle(new GUIContent("All Assemblies", "Search in all assemblies by default"), EditorPrefs.GetBool(k_AllAssemblies));
+            var showNamespace = EditorGUILayout.Toggle(new GUIContent("Full names", "show namespace in type name"), EditorPrefs.GetBool(k_ShowNamespace));
+            var width         = EditorGUILayout.IntField(new GUIContent("Width", "Window width"), EditorPrefs.GetInt(k_Width));
+            var maxItems      = EditorGUILayout.IntField(new GUIContent("Max items", "Max elements in popup window"), EditorPrefs.GetInt(k_MaxItems));
             
             EditorGUILayout.Space(7);
             _getList().DoLayoutList();
@@ -71,6 +80,7 @@ namespace SOCreator
             if (EditorGUI.EndChangeCheck())
             {
                 EditorPrefs.SetBool(k_AllAssemblies, allAssambles);
+                EditorPrefs.SetBool(k_ShowNamespace, showNamespace);
                 EditorPrefs.SetInt(k_Width, Mathf.Max(width, PickerWindow.k_Width));
                 EditorPrefs.SetInt(k_MaxItems, Mathf.Max(maxItems, 7));
             }
