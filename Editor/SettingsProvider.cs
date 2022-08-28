@@ -17,6 +17,7 @@ namespace SOCreator
         public const string k_PrefsFile       = nameof(SOCreator) + "Prefs.json";
         public const string k_PrefsPath       = "ProjectSettings\\" + k_PrefsFile;
 
+        public const bool k_AllAssambliesDefault = false;
         public const bool k_ShowNamespaceDefault = true;
         public const int  k_WeightDefault        = 320;
         public const int  k_MaxItemsDefault      = 40;
@@ -34,20 +35,8 @@ namespace SOCreator
         
         
         // =======================================================================
-        private SettingsProvider(string path, SettingsScope scope = SettingsScope.User)
-            : base(path, scope)
+        public SettingsProvider(string path, SettingsScope scopes, IEnumerable<string> keywords = null) : base(path, scopes, keywords)
         {
-            if (!EditorPrefs.HasKey(k_AllAssemblies))
-                EditorPrefs.SetBool(k_AllAssemblies, false);
-            
-            if (!EditorPrefs.HasKey(k_ShowNamespace))
-                EditorPrefs.SetBool(k_ShowNamespace, k_ShowNamespaceDefault);
-            
-            if (!EditorPrefs.HasKey(k_Width))
-                EditorPrefs.SetInt(k_Width, k_WeightDefault);
-            
-            if (!EditorPrefs.HasKey(k_MaxItems))
-                EditorPrefs.SetInt(k_MaxItems, k_MaxItemsDefault);
         }
         
         [InitializeOnLoadMethod]
@@ -63,6 +52,18 @@ namespace SOCreator
                                    .Select(guid => AssetDatabase.LoadAssetAtPath<AssemblyDefinitionAsset>(AssetDatabase.GUIDToAssetPath(guid)))
                                    .ToList();
             }
+            
+            if (!EditorPrefs.HasKey(k_AllAssemblies))
+                EditorPrefs.SetBool(k_AllAssemblies, k_AllAssambliesDefault);
+            
+            if (!EditorPrefs.HasKey(k_ShowNamespace))
+                EditorPrefs.SetBool(k_ShowNamespace, k_ShowNamespaceDefault);
+            
+            if (!EditorPrefs.HasKey(k_Width))
+                EditorPrefs.SetInt(k_Width, k_WeightDefault);
+            
+            if (!EditorPrefs.HasKey(k_MaxItems))
+                EditorPrefs.SetInt(k_MaxItems, k_MaxItemsDefault);
         }
 
         public override void OnGUI(string searchContext)
