@@ -15,32 +15,34 @@ namespace SOCreator
         private readonly List<GUIContent>       SearchedLabels = new List<GUIContent>();
         private readonly List<object>           SearchedObjects = new List<object>();
 
-        private object              m_PickedObject;
-        private object              m_SelectedObject;
-        private object              m_HoverObject;
-        private IList               m_Objects;
-        private int                 m_Suggestions;
-        private int                 m_LabelWidthCalculationProgress;
-        private float               m_MaxLabelWidth;
-        private string              m_SearchText = "";
-        private Vector2             m_ScrollPosition;
+        private object               m_PickedObject;
+        private object               m_SelectedObject;
+        private object               m_HoverObject;
+        private IList                m_Objects;
+        private int                  m_Suggestions;
+        private int                  m_LabelWidthCalculationProgress;
+        private float                m_MaxLabelWidth;
+        private string               m_SearchText = "";
+        private Vector2              m_ScrollPosition;
+ 
+        private bool                 HasSearchText => string.IsNullOrEmpty(m_SearchText) == false;
+        public string                SearchText => m_SearchText;
+        public bool                  IsPeeked => m_PickedObject != null;
 
-        private bool                HasSearchText => string.IsNullOrEmpty(m_SearchText) == false;
+        private Action<object>       m_OnPicked;
+        private Action<object>       m_OnHover;
+        private Action<object>       m_OnSeleceted;
+        private Action<PickerWindow> m_OnClose;
+        private bool                 m_FirstClickTrigger;
 
-        private Action<object>      m_OnPicked;
-        private Action<object>      m_OnHover;
-        private Action<object>      m_OnSeleceted;
-        private Action              m_OnClose;
-        private bool                m_FirstClickTrigger;
-
-        private bool                m_HoverObjectPicked;
-        private bool                m_Minimalistic;
-        private bool                m_InitializedPosition;
+        private bool                 m_HoverObjectPicked;
+        private bool                 m_Minimalistic;
+        private bool                 m_InitializedPosition;
 
         // =======================================================================
         public static void Show<T>(Action<object> onPicked, T selected, List<T> objects, int suggestions, Func<T, GUIContent> getLabel,
                                    string title = null, bool firstClickTrigger = true, Action<object> onSelected = null, Action<object> onHover = null,
-                                   Action onClose = null, float width = k_Width, int maxElements = 7)
+                                   Action<PickerWindow> onClose = null, float width = k_Width, int maxElements = 7, string searchText = null)
         {
             if (objects == null || objects.Count == 0)
             {
@@ -70,7 +72,7 @@ namespace SOCreator
             window.m_OnHover           = onHover;
             window.m_OnClose           = onClose;
             window.position            = new Rect(0, 0, Mathf.Max(width, k_Width), Mathf.Min(objects.Count, maxElements) * (InternalGUI.ButtonStyle.fixedHeight) + 6 + (window.m_Minimalistic ? 0 : InternalGUI.SearchBarHeight));
-
+            
             // Auto-Scroll to the selected object.
             if (selected != null)
             {
@@ -85,6 +87,9 @@ namespace SOCreator
                     }
                 }
             }
+            
+            if (string.IsNullOrEmpty(searchText) == false)
+                window._onSearchTextChanged(searchText);
 
             window.ShowPopup();
         }
@@ -159,7 +164,7 @@ namespace SOCreator
 
         private void OnDisable()
         {
-            m_OnClose?.Invoke();
+            m_OnClose?.Invoke(this);
         }
     
         // =======================================================================
@@ -250,7 +255,7 @@ namespace SOCreator
             if (text == m_SearchText)
                 return;
 
-            if (String.IsNullOrEmpty(text))
+            if (string.IsNullOrEmpty(text))
             {
                 SearchedLabels.Clear();
                 SearchedObjects.Clear();

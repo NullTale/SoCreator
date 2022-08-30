@@ -50,15 +50,16 @@ namespace SOCreator
         [MenuItem("Assets/Create/Scriptable Object", false, -1000)]
         private static void CreateScriptableObject(MenuCommand menuCommand)
         {
-            var showNamespace = EditorPrefs.GetBool(SettingsProvider.k_ShowNamespace);
-            var mainAssambly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(n => n.GetName().Name == "Assembly-CSharp");
-            var onlyMain     = !EditorPrefs.GetBool(SettingsProvider.k_AllAssemblies);
-            var additional   = SettingsProvider.s_Assemblies
-                                               .Where(n => n != null)
-                                               .Select(n => JsonUtility.FromJson<AssemblyDefinitionData>(n.text).name)
-                                               .Select(Assembly.Load)
-                                               .Where(n => n != null)
-                                               .ToList();
+            var showNamespace  = EditorPrefs.GetBool(SettingsProvider.k_ShowNamespace);
+            var keepSearchText = EditorPrefs.GetBool(SettingsProvider.k_KeepSearchText);
+            var mainAssambly   = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(n => n.GetName().Name == "Assembly-CSharp");
+            var onlyMain       = !EditorPrefs.GetBool(SettingsProvider.k_AllAssemblies);
+            var additional     = SettingsProvider.s_Assemblies
+                                                 .Where(n => n != null)
+                                                 .Select(n => JsonUtility.FromJson<AssemblyDefinitionData>(n.text).name)
+                                                 .Select(Assembly.Load)
+                                                 .Where(n => n != null)
+                                                 .ToList();
             
             if (GetGUIEvent()?.shift == true)
                 onlyMain = false;
@@ -107,7 +108,16 @@ namespace SOCreator
                     pickedType.Name,
                     s_ScriptableObjectIcon,
                     string.Empty);
-            }, null, types.Distinct().ToList(), 0, s => new GUIContent(showNamespace ? s.FullName : s.Name), "ScriptableObject Type", true, width: wndWidth, maxElements: wndMaxItems);
+            }, null, types.Distinct().ToList(), 0, s => new GUIContent(showNamespace ? s.FullName : s.Name), 
+            title: "ScriptableObject Type", 
+            firstClickTrigger: true, 
+            width: wndWidth, 
+            maxElements: wndMaxItems,
+            searchText: keepSearchText ? EditorPrefs.GetString(SettingsProvider.k_SearchText) : string.Empty,
+            onClose: wnd =>
+            { 
+                EditorPrefs.SetString(SettingsProvider.k_SearchText, wnd.SearchText);
+            });
 
             // -----------------------------------------------------------------------
             bool _defaultCheck(Type type)
