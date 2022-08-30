@@ -7,10 +7,10 @@
   "documentationUrl": "https://github.com/NullTale/ScriptableObjectCreator",
   "author": {
     "name": "NullTale",
-    "email": "n12holwingshame@gmail.com",
+    "email": "nulltale@gmail.com",
     "url": "https://nulltale.itch.io"
   },
-  "type": "library",
+  "type": "tool",
   "dependencies": {
   },
   "hideInEditor": false

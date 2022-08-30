@@ -10,7 +10,9 @@ namespace SOCreator
     public class SOCreateAttribute : PropertyAttribute
     {
         public Mode Visibility;
+        public bool UseForChildren;
         
+        // =======================================================================
         [Serializable]
         public enum Mode
         {
@@ -20,14 +22,16 @@ namespace SOCreator
         }
         
         // =======================================================================
-        public SOCreateAttribute(bool visible)
+        public SOCreateAttribute(bool visible, bool useForChildren = true)
         {
             Visibility = visible ? Mode.AlwaysVisible : Mode.Hidden;
+            UseForChildren = useForChildren;
         }
         
-        public SOCreateAttribute(Mode visibility)
+        public SOCreateAttribute(Mode visibility, bool useForChildren = true)
         {
             Visibility = visibility;
+            UseForChildren = useForChildren;
         }
     }
 }

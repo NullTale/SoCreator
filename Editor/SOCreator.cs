@@ -70,6 +70,10 @@ namespace SOCreator
                                          return false;
 
                                      var vibilityAttribute = type.GetCustomAttribute<SOCreateAttribute>();
+                                     
+                                     if (vibilityAttribute == null)
+                                         vibilityAttribute = _getFirstInheritAttribute(type);
+                                     
                                      if (vibilityAttribute != null)
                                      {
                                          switch (vibilityAttribute.Visibility)
@@ -115,6 +119,21 @@ namespace SOCreator
                     return false;
 
                 return true;
+            }
+            
+            SOCreateAttribute _getFirstInheritAttribute(Type type)
+            {
+                var current = type;
+                while (current != null)
+                {
+                    var attribute = type.GetCustomAttribute<SOCreateAttribute>();
+                    if (attribute != null && attribute.UseForChildren)
+                        return attribute;
+                    
+                    current = current.BaseType;
+                }
+                
+                return null;
             }
         }
 
