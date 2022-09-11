@@ -5,6 +5,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEditor.Compilation;
 using UnityEditor.ProjectWindowCallback;
+using UnityEditor.ShortcutManagement;
 using UnityEngine;
 using Assembly = System.Reflection.Assembly;
 
@@ -47,8 +48,19 @@ namespace SOCreator
         }
 
         // =======================================================================
+        [Shortcut("Create Scriptable Object", KeyCode.I, ShortcutModifiers.Shift)]
+        public static void CreateScriptableObject()
+        {
+            CreateScriptableObject(true);
+        }
+        
         [MenuItem("Assets/Create/Scriptable Object", false, -1000)]
-        private static void CreateScriptableObject(MenuCommand menuCommand)
+        public static void CreateScriptableObject(MenuCommand menuCommand)
+        {
+            CreateScriptableObject(true);
+        }
+        
+        public static void CreateScriptableObject(bool ignoreShift)
         {
             var showNamespace  = EditorPrefs.GetBool(SettingsProvider.k_ShowNamespace);
             var keepSearchText = EditorPrefs.GetBool(SettingsProvider.k_KeepSearchText);
@@ -61,7 +73,7 @@ namespace SOCreator
                                                  .Where(n => n != null)
                                                  .ToList();
             
-            if (GetGUIEvent()?.shift == true)
+            if (ignoreShift == false && GetGUIEvent()?.shift == true)
                 onlyMain = false;
             
             var types = TypeCache.GetTypesDerivedFrom<ScriptableObject>()
@@ -70,7 +82,7 @@ namespace SOCreator
                                      if (type.IsAbstract || type.IsGenericTypeDefinition)
                                          return false;
 
-                                     var vibilityAttribute = type.GetCustomAttribute<SOCreateAttribute>();
+                                     var vibilityAttribute = type.GetCustomAttribute<SoCreateAttribute>();
                                      
                                      if (vibilityAttribute == null)
                                          vibilityAttribute = _getFirstInheritAttribute(type);
@@ -79,11 +91,11 @@ namespace SOCreator
                                      {
                                          switch (vibilityAttribute.Visibility)
                                          {
-                                             case SOCreateAttribute.Mode.Hidden:
+                                             case SoCreateAttribute.Mode.Hidden:
                                                  return false;
-                                             case SOCreateAttribute.Mode.Visible:
+                                             case SoCreateAttribute.Mode.Visible:
                                                  return _defaultCheck(type);
-                                             case SOCreateAttribute.Mode.AlwaysVisible:
+                                             case SoCreateAttribute.Mode.AlwaysVisible:
                                                  return true;
                                              default:
                                                  throw new ArgumentOutOfRangeException();
@@ -131,12 +143,12 @@ namespace SOCreator
                 return true;
             }
             
-            SOCreateAttribute _getFirstInheritAttribute(Type type)
+            SoCreateAttribute _getFirstInheritAttribute(Type type)
             {
                 var current = type;
                 while (current != null)
                 {
-                    var attribute = type.GetCustomAttribute<SOCreateAttribute>();
+                    var attribute = type.GetCustomAttribute<SoCreateAttribute>();
                     if (attribute != null && attribute.UseForChildren)
                         return attribute;
                     

@@ -7,7 +7,7 @@ namespace SOCreator
     /// Allows to show scriptable object in create menu
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
-    public class SOCreateAttribute : PropertyAttribute
+    public class SoCreateAttribute : PropertyAttribute
     {
         public Mode Visibility;
         public bool UseForChildren;
@@ -22,13 +22,13 @@ namespace SOCreator
         }
         
         // =======================================================================
-        public SOCreateAttribute(bool visible, bool useForChildren = true)
+        public SoCreateAttribute(bool visible, bool useForChildren = true)
         {
             Visibility = visible ? Mode.AlwaysVisible : Mode.Hidden;
             UseForChildren = useForChildren;
         }
         
-        public SOCreateAttribute(Mode visibility, bool useForChildren = true)
+        public SoCreateAttribute(Mode visibility, bool useForChildren = true)
         {
             Visibility = visibility;
             UseForChildren = useForChildren;

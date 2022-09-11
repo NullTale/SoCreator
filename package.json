@@ -1,6 +1,6 @@
 {
   "name": "www.nulltale.socreator",
-  "displayName": "SOCreator",
+  "displayName": "SoCreator",
   "version": "1.0.0",
   "unity": "2020.1",
   "description": "Scriptable object creator tool",
