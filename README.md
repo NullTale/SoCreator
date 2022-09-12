@@ -12,7 +12,7 @@ Install from Package Manager git url
 ![image](https://user-images.githubusercontent.com/1497430/181345613-b81a77c6-c449-4b19-ab1e-88b1ef06f6fc.png)
 
 #### Demonstration
-Default shortcut is `Shift + I`, can be changed in Edit>Shortcuts... Create Scriptable Object   
+Default shortcut is `Shift + I`, can be changed in Edit>Shortcuts... SoCreator/Create Scriptable Object   
 ![SOCreator](https://user-images.githubusercontent.com/1497430/181344424-018455b2-d7d6-4ee0-b561-fbca878b769a.gif)
 
 #### Marking

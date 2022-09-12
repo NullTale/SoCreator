@@ -9,9 +9,9 @@ using UnityEditor.ShortcutManagement;
 using UnityEngine;
 using Assembly = System.Reflection.Assembly;
 
-namespace SOCreator
+namespace SoCreator
 {
-    public static class SOCreator
+    public static class SoCreator
     {
         private static Texture2D s_ScriptableObjectIcon = (EditorGUIUtility.IconContent("ScriptableObject Icon").image as Texture2D);
 
@@ -48,8 +48,8 @@ namespace SOCreator
         }
 
         // =======================================================================
-        [Shortcut("Create Scriptable Object", KeyCode.I, ShortcutModifiers.Shift)]
-        public static void CreateScriptableObject()
+        [Shortcut("SoCreator/Create Scriptable Object", KeyCode.I, ShortcutModifiers.Shift)]
+        public static void CreateScriptableObject(ShortcutArguments sa)
         {
             CreateScriptableObject(true);
         }
@@ -57,7 +57,7 @@ namespace SOCreator
         [MenuItem("Assets/Create/Scriptable Object", false, -1000)]
         public static void CreateScriptableObject(MenuCommand menuCommand)
         {
-            CreateScriptableObject(true);
+            CreateScriptableObject(false);
         }
         
         public static void CreateScriptableObject(bool ignoreShift)

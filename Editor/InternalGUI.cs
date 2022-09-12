@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace SOCreator
+namespace SoCreator
 {
     public static class InternalGUI
     {

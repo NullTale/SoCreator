@@ -5,7 +5,7 @@ using System.Globalization;
 using UnityEditor;
 using UnityEngine;
 
-namespace SOCreator
+namespace SoCreator
 {
     public sealed class PickerWindow : EditorWindow
     {

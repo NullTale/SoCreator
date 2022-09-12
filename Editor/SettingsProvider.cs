@@ -6,19 +6,19 @@ using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace SOCreator
+namespace SoCreator
 {
     public class SettingsProvider : UnityEditor.SettingsProvider
     {
-        public const string k_AllAssemblies   = nameof(SOCreator) + ".AllAssemblies";
-        public const string k_Width           = nameof(SOCreator) + ".Width";
-        public const string k_MaxItems        = nameof(SOCreator) + ".MaxItems";
-        public const string k_ShowNamespace   = nameof(SOCreator) + ".ShowNamespace";
-        public const string k_KeepSearchText  = nameof(SOCreator) + ".KeepSearchText";
-        public const string k_PrefsFile       = nameof(SOCreator) + "Prefs.json";
+        public const string k_AllAssemblies   = nameof(SoCreator) + ".AllAssemblies";
+        public const string k_Width           = nameof(SoCreator) + ".Width";
+        public const string k_MaxItems        = nameof(SoCreator) + ".MaxItems";
+        public const string k_ShowNamespace   = nameof(SoCreator) + ".ShowNamespace";
+        public const string k_KeepSearchText  = nameof(SoCreator) + ".KeepSearchText";
+        public const string k_PrefsFile       = nameof(SoCreator) + "Prefs.json";
         public const string k_PrefsPath       = "ProjectSettings\\" + k_PrefsFile;
         
-        public const string k_SearchText      = nameof(SOCreator) + ".SearchText";
+        public const string k_SearchText      = nameof(SoCreator) + ".SearchText";
 
         public const bool k_AllAssambliesDefault  = false;
         public const bool k_ShowNamespaceDefault  = true;
@@ -151,7 +151,7 @@ namespace SOCreator
         [SettingsProvider]
         public static UnityEditor.SettingsProvider CreateMyCustomSettingsProvider()
         {
-            var provider = new SettingsProvider("Preferences/SOCreator", SettingsScope.User);
+            var provider = new SettingsProvider("Preferences/SoCreator", SettingsScope.User);
 
             // Automatically extract all keywords from the Styles.
             //provider.keywords = GetSearchKeywordsFromGUIContentProperties<Styles>();
