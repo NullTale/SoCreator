@@ -1,13 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
-using UnityEditor.Compilation;
 using UnityEditor.ProjectWindowCallback;
 using UnityEditor.ShortcutManagement;
 using UnityEngine;
 using Assembly = System.Reflection.Assembly;
+using Object = UnityEngine.Object;
 
 namespace SoCreator
 {
@@ -28,7 +29,7 @@ namespace SoCreator
 
             public override void Cancelled(int instanceId, string pathName, string resourceFile)
             {
-                _create(pathName);
+                //_create(pathName);
             }
 
             // =======================================================================
@@ -51,16 +52,64 @@ namespace SoCreator
         [Shortcut("SoCreator/Create Scriptable Object", KeyCode.I, ShortcutModifiers.Shift)]
         public static void CreateScriptableObject(ShortcutArguments sa)
         {
-            CreateScriptableObject(true);
+            CreateScriptableObject(true, true);
         }
         
         [MenuItem("Assets/Create/Scriptable Object", false, -1000)]
         public static void CreateScriptableObject(MenuCommand menuCommand)
         {
-            CreateScriptableObject(false);
+            CreateScriptableObject(false, false);
         }
         
-        public static void CreateScriptableObject(bool ignoreShift)
+        public static void CreateScriptableObject(bool ignoreShift, bool forcePath)
+        {
+            var allAssemblies = (ignoreShift == false && GetGUIEvent()?.shift == true);
+
+            var types = GetSoTypes(allAssemblies, type => type.IsAbstract == false && type.IsGenericTypeDefinition == false);
+
+            if (types.Count == 0)
+            {
+                Debug.Log("SoCreator: no visible Scriptable Object types found");
+                return;
+            }
+            
+            var showNamespace  = EditorPrefs.GetBool(SettingsProvider.k_ShowNamespace);
+            var keepSearchText = EditorPrefs.GetBool(SettingsProvider.k_KeepSearchText);
+            var wndWidth       = (float)EditorPrefs.GetInt(SettingsProvider.k_Width);
+            var wndMaxItems    =  EditorPrefs.GetInt(SettingsProvider.k_MaxItems);
+            PickerWindow.Show(picked =>
+                              {
+                                  var pickedType   = (Type)picked;
+                                  var doCreateFile = ScriptableObject.CreateInstance<DoCreateFile>();
+                                  var path = pickedType.Name;
+                                  if (forcePath)
+                                  {
+                                      var typeFolder = GetTypeFolder(pickedType);
+                                      if (string.IsNullOrEmpty(typeFolder) == false)
+                                        path = $"{typeFolder}\\{pickedType.Name}";
+                                  }
+                                  
+                                  doCreateFile.ObjectType = pickedType;
+                                  
+                                  ProjectWindowUtil.StartNameEditingIfProjectWindowExists(
+                                      0,
+                                      doCreateFile,
+                                      path,
+                                      s_ScriptableObjectIcon,
+                                      string.Empty);
+                              }, null, types, 0, s => new GUIContent(showNamespace ? s.FullName : s.Name), 
+                              title: "ScriptableObject Type", 
+                              firstClickTrigger: true, 
+                              width: wndWidth, 
+                              maxElements: wndMaxItems,
+                              searchText: keepSearchText ? EditorPrefs.GetString(SettingsProvider.k_SearchText) : string.Empty,
+                              onClose: wnd =>
+                              { 
+                                  EditorPrefs.SetString(SettingsProvider.k_SearchText, wnd.SearchText);
+                              });
+        }
+        
+        public static List<Type> GetSoTypes(bool allAssemblies, Predicate<Type> filter)
         {
             var showNamespace  = EditorPrefs.GetBool(SettingsProvider.k_ShowNamespace);
             var keepSearchText = EditorPrefs.GetBool(SettingsProvider.k_KeepSearchText);
@@ -73,13 +122,13 @@ namespace SoCreator
                                                  .Where(n => n != null)
                                                  .ToList();
             
-            if (ignoreShift == false && GetGUIEvent()?.shift == true)
+            if (allAssemblies)
                 onlyMain = false;
             
             var types = TypeCache.GetTypesDerivedFrom<ScriptableObject>()
                                  .Where(type =>
                                  {
-                                     if (type.IsAbstract || type.IsGenericTypeDefinition)
+                                     if (filter(type) == false)
                                          return false;
 
                                      var vibilityAttribute = type.GetCustomAttribute<SoCreateAttribute>();
@@ -104,32 +153,10 @@ namespace SoCreator
 
                                      return _defaultCheck(type);
                                  })
+                                 .Distinct()
                                  .ToList();
 
-            var wndWidth = (float)EditorPrefs.GetInt(SettingsProvider.k_Width);
-            var wndMaxItems =  EditorPrefs.GetInt(SettingsProvider.k_MaxItems);
-            PickerWindow.Show(picked =>
-            {
-                var pickedType = (Type)picked;
-                var doCreateFile = ScriptableObject.CreateInstance<DoCreateFile>();
-                doCreateFile.ObjectType = pickedType;
-
-                ProjectWindowUtil.StartNameEditingIfProjectWindowExists(
-                    0,
-                    doCreateFile,
-                    pickedType.Name,
-                    s_ScriptableObjectIcon,
-                    string.Empty);
-            }, null, types.Distinct().ToList(), 0, s => new GUIContent(showNamespace ? s.FullName : s.Name), 
-            title: "ScriptableObject Type", 
-            firstClickTrigger: true, 
-            width: wndWidth, 
-            maxElements: wndMaxItems,
-            searchText: keepSearchText ? EditorPrefs.GetString(SettingsProvider.k_SearchText) : string.Empty,
-            onClose: wnd =>
-            { 
-                EditorPrefs.SetString(SettingsProvider.k_SearchText, wnd.SearchText);
-            });
+            return types;
 
             // -----------------------------------------------------------------------
             bool _defaultCheck(Type type)
@@ -159,6 +186,41 @@ namespace SoCreator
             }
         }
 
+        public static string GetTypeFolder(Type type)
+        {
+            foreach (var marker in _getBaseClasses().Prepend(type))
+            {
+                var path = SettingsProvider.s_TypeFolders.FirstOrDefault(typePath => isDerivedFrom(marker, typePath.Type));
+                if (path != null)
+                    return AssetDatabase.GetAssetPath(path.Path);
+            }
+            
+            return string.Empty;
+
+            // -----------------------------------------------------------------------
+            bool isDerivedFrom(Type type, Type parent)
+            {
+                if (type == parent)
+                    return true;
+                
+                if (type.IsGenericType && parent.IsGenericTypeDefinition)
+                    return type.GetGenericTypeDefinition() == parent;
+                
+                return type.IsSubclassOf(parent);
+            }
+            
+            IEnumerable<Type> _getBaseClasses()
+            {
+                var current = type;
+                do
+                {
+                    current = current.BaseType;
+                    yield return current;
+                }
+                while (current != typeof(ScriptableObject));
+            }
+        }
+        
         private static Event GetGUIEvent()
         {
             var field = typeof(Event).GetField("s_Current", BindingFlags.Static | BindingFlags.NonPublic);
