@@ -1,11 +1,11 @@
-# ScriptableObjectCreator
-Adds a ScriptableObjects creation menu.
+# Scriptable Object Creator
+Add Component like Scriptable Object creation menu.
 #### Features
-- Project specific search assemblies.
-- Сonvenient menu with a search bar.
-- Some visual options.
+- Project specific search assemblies
+- Сonvenient menu with a search bar
+- Some visual options
 - Manual object marking
-- shortcut organization folders
+- Organization folders
 
 Install from Package Manager git url 
 `https://github.com/NullTale/ScriptableObjectCreator.git`
