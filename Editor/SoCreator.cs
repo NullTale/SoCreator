@@ -49,8 +49,13 @@ namespace SoCreator
         }
 
         // =======================================================================
-        [Shortcut("SoCreator/Create Scriptable Object", KeyCode.I, ShortcutModifiers.Shift)]
+        [Shortcut("SoCreator/Create Scriptable Object", KeyCode.I, ShortcutModifiers.Shift | ShortcutModifiers.Control)]
         public static void CreateScriptableObject(ShortcutArguments sa)
+        {
+            CreateScriptableObject(true, false);
+        }
+        [Shortcut("SoCreator/Create Scriptable Object using Type paths", KeyCode.I, ShortcutModifiers.Shift)]
+        public static void CreateScriptableObjectToPath(ShortcutArguments sa)
         {
             CreateScriptableObject(true, true);
         }

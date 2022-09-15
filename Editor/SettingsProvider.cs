@@ -254,7 +254,7 @@ namespace SoCreator
             };
             _foldersList.drawHeaderCallback = rect =>
             {
-                EditorGUI.LabelField(rect, new GUIContent("Shortcut paths", "Default paths for Script Objects created via shortcut"));
+                EditorGUI.LabelField(rect, new GUIContent("Type paths", "Default paths for Script Objects created via shortcut"));
             };
             
             return _foldersList;
