@@ -198,15 +198,15 @@ namespace SoCreator
             return string.Empty;
 
             // -----------------------------------------------------------------------
-            bool isDerivedFrom(Type type, Type parent)
+            bool isDerivedFrom(Type type, Type marker)
             {
-                if (type == parent)
+                if (type == marker)
                     return true;
                 
-                if (type.IsGenericType && parent.IsGenericTypeDefinition)
-                    return type.GetGenericTypeDefinition() == parent;
+                if (type.IsGenericType && marker.IsGenericTypeDefinition)
+                    return type.GetGenericTypeDefinition() == marker;
                 
-                return type.IsSubclassOf(parent);
+                return type.IsSubclassOf(marker) && type.BaseType.IsSubclassOf(marker) == false;
             }
             
             IEnumerable<Type> _getBaseClasses()
