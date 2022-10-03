@@ -179,8 +179,7 @@ namespace SoCreator
             _assemblesList.elementHeight = EditorGUIUtility.singleLineHeight;
             _assemblesList.onRemoveCallback = list =>
             {
-                var toRemove = list.selectedIndices.Select(index => s_Assemblies[index]).ToList();
-                s_Assemblies.RemoveAll(n => toRemove.Contains(n));
+                s_Assemblies.RemoveAt(list.index);
                 _saveProjectPrefs();
             };
             _assemblesList.onAddCallback = list =>
@@ -244,8 +243,7 @@ namespace SoCreator
             _foldersList.elementHeight = EditorGUIUtility.singleLineHeight;
             _foldersList.onRemoveCallback = list =>
             {
-                var toRemove = list.selectedIndices.Select(index => s_TypeFolders[index]).ToList();
-                s_TypeFolders.RemoveAll(n => toRemove.Contains(n));
+                s_Assemblies.RemoveAt(list.index);
                 _saveProjectPrefs();
             };
             _foldersList.onAddCallback = list =>
