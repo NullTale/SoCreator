@@ -2,13 +2,13 @@
   "name": "www.nulltale.socreator",
   "displayName": "SoCreator",
   "version": "1.0.0",
-  "unity": "2020.1",
+  "unity": "2020.3",
   "description": "Scriptable object creator tool",
-  "documentationUrl": "https://github.com/NullTale/ScriptableObjectCreator",
+  "documentationUrl": "https://github.com/NullTale/SoCreator",
   "author": {
     "name": "NullTale",
     "email": "nulltale@gmail.com",
-    "url": "https://nulltale.itch.io"
+    "url": "https://github.com/NullTale"
   },
   "type": "tool",
   "dependencies": {
