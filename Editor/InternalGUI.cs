@@ -15,6 +15,7 @@ namespace SoCreator
 
 
         public static float SearchBarHeight => EditorStyles.toolbar.fixedHeight;
+        public static float ScrollBarHeight => 13;
 
         public static float LabelHeight => ButtonStyle.fixedHeight;
 

@@ -42,7 +42,7 @@ namespace SoCreator
         // =======================================================================
         public static void Show<T>(Action<object> onPicked, T selected, List<T> objects, int suggestions, Func<T, GUIContent> getLabel,
                                    string title = null, bool firstClickTrigger = true, Action<object> onSelected = null, Action<object> onHover = null,
-                                   Action<PickerWindow> onClose = null, float width = k_Width, int maxElements = 7, string searchText = null)
+                                   Action<PickerWindow> onClose = null, float width = k_Width, int maxElements = 7, string searchText = null, bool minimalistic = false)
         {
             if (objects == null || objects.Count == 0)
             {
@@ -52,10 +52,7 @@ namespace SoCreator
 
             var window = CreateInstance<PickerWindow>();
             window.titleContent = title == null ? new GUIContent("Pick a " + typeof(T).FullName) : new GUIContent(title);
-            window.minSize = new Vector2(112, 20);
 
-            if (objects.Count <= 7)
-                window.m_Minimalistic = true;
 
             if (window.Labels.Capacity < objects.Count)
                 window.Labels.Capacity = objects.Count;
@@ -63,6 +60,7 @@ namespace SoCreator
             foreach (var item in objects)
                 window.Labels.Add(getLabel(item));
 
+            window.m_Minimalistic      = minimalistic;
             window.m_SelectedObject    = selected;
             window.m_Objects           = objects;
             window.m_Suggestions       = suggestions;
@@ -71,7 +69,10 @@ namespace SoCreator
             window.m_OnSeleceted       = onSelected;
             window.m_OnHover           = onHover;
             window.m_OnClose           = onClose;
-            window.position            = new Rect(0, 0, Mathf.Max(width, k_Width), Mathf.Min(objects.Count, maxElements) * (InternalGUI.ButtonStyle.fixedHeight) + 6 + (window.m_Minimalistic ? 0 : InternalGUI.SearchBarHeight));
+            window.position            = new Rect(0, 0, Mathf.Max(width, k_Width), Mathf.Min(objects.Count, maxElements) * (InternalGUI.ButtonStyle.fixedHeight) + 6 + (window.m_Minimalistic ? 0 : InternalGUI.SearchBarHeight) + InternalGUI.ScrollBarHeight);
+            
+            window.minSize = new Vector2(112, 20);
+            window.maxSize = window.position.size; 
             
             // Auto-Scroll to the selected object.
             if (selected != null)
@@ -126,7 +127,7 @@ namespace SoCreator
                 default:
                     break;
             }
-
+            
             if (_checkInput())
             {
                 Event.current.Use();

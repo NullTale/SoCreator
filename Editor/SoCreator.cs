@@ -75,7 +75,7 @@ namespace SoCreator
 
             if (types.Count == 0)
             {
-                Debug.Log("SoCreator: no visible Scriptable Object types was found");
+                Debug.Log("SoCreator: no visible ScriptableObject types was found");
                 return;
             }
             
