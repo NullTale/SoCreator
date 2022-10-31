@@ -1,6 +1,7 @@
 # Scriptable Object Creator
 ### Description
-AddComponent like ScriptableObject creation tool.
+Tool for ScriptableObjects creation.
+
 #### Features
 - Project specific search assemblies
 - Attribute object marking
