@@ -9,8 +9,7 @@ Tool for ScriptableObjects creation.
 - Shortcuts
 
 #### Installation
-Install from Package Manager git url 
-`https://github.com/NullTale/ScriptableObjectCreator.git`
+Install from Package Manager git url `https://github.com/NullTale/SoCreator.git`
 
 ![image](https://user-images.githubusercontent.com/1497430/181345613-b81a77c6-c449-4b19-ab1e-88b1ef06f6fc.png)
 
