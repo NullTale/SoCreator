@@ -3,7 +3,7 @@
   "displayName": "SoCreator",
   "version": "1.0.0",
   "unity": "2020.3",
-  "description": "Scriptable object creator tool",
+  "description": "ScriptableObjects creation tool",
   "documentationUrl": "https://github.com/NullTale/SoCreator",
   "author": {
     "name": "NullTale",
