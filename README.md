@@ -26,6 +26,6 @@ Classes can be marked with `SoCreateAttribute` to manually define their visibili
 ### Other options
 For the project, you can set assemblies in which the search will be performed by default.
 
-Also specify the default folders for Scriptable Objects of a certain type created through a hotkey
+Also specify the default folders for Scriptable Objects of a certain type created through a hotkey.
 
 ![image](https://user-images.githubusercontent.com/1497430/191843759-2836cd67-f169-4f65-8fca-264e7e9e7a07.png)
