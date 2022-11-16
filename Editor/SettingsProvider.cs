@@ -15,6 +15,7 @@ namespace SoCreator
         public const string k_MaxItems        = nameof(SoCreator) + ".MaxItems";
         public const string k_ShowNamespace   = nameof(SoCreator) + ".ShowNamespace";
         public const string k_KeepSearchText  = nameof(SoCreator) + ".KeepSearchText";
+        public const string k_FormatDefaultName  = nameof(SoCreator) + ".FormatDefaultName";
         public const string k_PrefsFile       = nameof(SoCreator) + "Prefs.json";
         public const string k_PrefsPath       = "ProjectSettings\\" + k_PrefsFile;
         
@@ -23,6 +24,7 @@ namespace SoCreator
         public const bool k_AllAssambliesDefault  = false;
         public const bool k_ShowNamespaceDefault  = true;
         public const bool k_KeepSearchTextDefault = false;
+        public const bool k_FormatDefaultNameDefault  = false;
         public const int  k_WeightDefault         = 320;
         public const int  k_MaxItemsDefault       = 70;
 
@@ -125,6 +127,9 @@ namespace SoCreator
             
             if (!EditorPrefs.HasKey(k_KeepSearchText))
                 EditorPrefs.SetBool(k_KeepSearchText, k_KeepSearchTextDefault);
+                
+            if (!EditorPrefs.HasKey(k_FormatDefaultName))
+                EditorPrefs.SetBool(k_KeepSearchText, k_FormatDefaultNameDefault);
             
             if (!EditorPrefs.HasKey(k_Width))
                 EditorPrefs.SetInt(k_Width, k_WeightDefault);
@@ -140,11 +145,12 @@ namespace SoCreator
         {
             //EditorGUILayout.ObjectField(null, typeof(AssemblyDefinitionAsset), false);
             EditorGUI.BeginChangeCheck();
-            var allAssambles   = EditorGUILayout.Toggle(new GUIContent("All Assemblies", "Search in all assemblies by default"), EditorPrefs.GetBool(k_AllAssemblies));
-            var showNamespace  = EditorGUILayout.Toggle(new GUIContent("Full Names", "Show namespace in type name"), EditorPrefs.GetBool(k_ShowNamespace));
-            var keepSearchText = EditorGUILayout.Toggle(new GUIContent("Keep Search Text", "Keep previously entered search text"), EditorPrefs.GetBool(k_KeepSearchText));
-            var width          = EditorGUILayout.IntField(new GUIContent("Width", "Window width"), EditorPrefs.GetInt(k_Width));
-            var maxItems       = EditorGUILayout.IntField(new GUIContent("Max Items", "Max elements in popup window"), EditorPrefs.GetInt(k_MaxItems));
+            var allAssambles      = EditorGUILayout.Toggle(new GUIContent("All Assemblies", "Search in all assemblies by default"), EditorPrefs.GetBool(k_AllAssemblies));
+            var showNamespace     = EditorGUILayout.Toggle(new GUIContent("Full Names", "Show namespace in type name"), EditorPrefs.GetBool(k_ShowNamespace));
+            var keepSearchText    = EditorGUILayout.Toggle(new GUIContent("Keep Search Text", "Keep previously entered search text"), EditorPrefs.GetBool(k_KeepSearchText));
+            var formatDefaultName = EditorGUILayout.Toggle(new GUIContent("Format default name", "Should the default name of the created So be formatted"), EditorPrefs.GetBool(k_FormatDefaultName));
+            var width             = EditorGUILayout.IntField(new GUIContent("Width", "Window width"), EditorPrefs.GetInt(k_Width));
+            var maxItems          = EditorGUILayout.IntField(new GUIContent("Max Items", "Max elements in popup window"), EditorPrefs.GetInt(k_MaxItems));
             
             EditorGUILayout.Space(7);
             _getAssembliesList().DoLayoutList();
@@ -155,6 +161,7 @@ namespace SoCreator
                 EditorPrefs.SetBool(k_AllAssemblies, allAssambles);
                 EditorPrefs.SetBool(k_ShowNamespace, showNamespace);
                 EditorPrefs.SetBool(k_KeepSearchText, keepSearchText);
+                EditorPrefs.SetBool(k_FormatDefaultName, formatDefaultName);
                 EditorPrefs.SetInt(k_Width, Mathf.Max(width, PickerWindow.k_Width));
                 EditorPrefs.SetInt(k_MaxItems, Mathf.Max(maxItems, 7));
             }

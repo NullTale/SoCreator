@@ -37,6 +37,10 @@ namespace SoCreator
             {
                 var so = ScriptableObject.CreateInstance(ObjectType);
 
+                var formatName = EditorPrefs.GetBool(SettingsProvider.k_FormatDefaultName);
+                if (formatName)
+                    pathName = $"{Path.GetDirectoryName(pathName)}\\{ObjectNames.NicifyVariableName(Path.GetFileName(pathName))}";
+                
                 AssetDatabase.CreateAsset(so, Path.ChangeExtension(pathName, ".asset"));
                 ProjectWindowUtil.ShowCreatedAsset(so);
             }
