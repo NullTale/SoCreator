@@ -36,10 +36,6 @@ namespace SoCreator
             private void _create(string pathName)
             {
                 var so = ScriptableObject.CreateInstance(ObjectType);
-
-                var formatName = EditorPrefs.GetBool(SettingsProvider.k_FormatDefaultName);
-                if (formatName)
-                    pathName = $"{Path.GetDirectoryName(pathName)}\\{ObjectNames.NicifyVariableName(Path.GetFileName(pathName))}";
                 
                 AssetDatabase.CreateAsset(so, Path.ChangeExtension(pathName, ".asset"));
                 ProjectWindowUtil.ShowCreatedAsset(so);
@@ -92,11 +88,17 @@ namespace SoCreator
                                   var pickedType   = (Type)picked;
                                   var doCreateFile = ScriptableObject.CreateInstance<DoCreateFile>();
                                   var path = pickedType.Name;
+                                  
+                                  var formatName = EditorPrefs.GetBool(SettingsProvider.k_FormatDefaultName);
+                                  if (formatName)
+                                        path = ObjectNames.NicifyVariableName(path);
+                                  
                                   if (forcePath)
                                   {
+                
                                       var typeFolder = GetTypeFolder(pickedType);
                                       if (string.IsNullOrEmpty(typeFolder) == false)
-                                        path = $"{typeFolder}\\{pickedType.Name}";
+                                        path = $"{typeFolder}\\{path}";
                                   }
                                   
                                   doCreateFile.ObjectType = pickedType;
