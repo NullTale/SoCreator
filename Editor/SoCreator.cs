@@ -95,7 +95,6 @@ namespace SoCreator
                                   
                                   if (forcePath)
                                   {
-                
                                       var typeFolder = GetTypeFolder(pickedType);
                                       if (string.IsNullOrEmpty(typeFolder) == false)
                                         path = $"{typeFolder}\\{path}";

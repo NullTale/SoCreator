@@ -10,16 +10,15 @@ namespace SoCreator
 {
     public class SettingsProvider : UnityEditor.SettingsProvider
     {
-        public const string k_AllAssemblies   = nameof(SoCreator) + ".AllAssemblies";
-        public const string k_Width           = nameof(SoCreator) + ".Width";
-        public const string k_MaxItems        = nameof(SoCreator) + ".MaxItems";
-        public const string k_ShowNamespace   = nameof(SoCreator) + ".ShowNamespace";
-        public const string k_KeepSearchText  = nameof(SoCreator) + ".KeepSearchText";
-        public const string k_FormatDefaultName  = nameof(SoCreator) + ".FormatDefaultName";
-        public const string k_PrefsFile       = nameof(SoCreator) + "Prefs.json";
-        public const string k_PrefsPath       = "ProjectSettings\\" + k_PrefsFile;
-        
-        public const string k_SearchText      = nameof(SoCreator) + ".SearchText";
+        public const string k_AllAssemblies     = nameof(SoCreator) + ".AllAssemblies";
+        public const string k_Width             = nameof(SoCreator) + ".Width";
+        public const string k_MaxItems          = nameof(SoCreator) + ".MaxItems";
+        public const string k_ShowNamespace     = nameof(SoCreator) + ".ShowNamespace";
+        public const string k_KeepSearchText    = nameof(SoCreator) + ".KeepSearchText";
+        public const string k_FormatDefaultName = nameof(SoCreator) + ".FormatDefaultName";
+        public const string k_SearchText        = nameof(SoCreator) + ".SearchText";
+        public const string k_PrefsFile         = nameof(SoCreator) + "Prefs.json";
+        public const string k_PrefsPath         = "ProjectSettings\\" + k_PrefsFile;
 
         public const bool k_AllAssambliesDefault  = false;
         public const bool k_ShowNamespaceDefault  = true;
@@ -148,7 +147,7 @@ namespace SoCreator
             var allAssambles      = EditorGUILayout.Toggle(new GUIContent("All Assemblies", "Search in all assemblies by default"), EditorPrefs.GetBool(k_AllAssemblies));
             var showNamespace     = EditorGUILayout.Toggle(new GUIContent("Full Names", "Show namespace in type name"), EditorPrefs.GetBool(k_ShowNamespace));
             var keepSearchText    = EditorGUILayout.Toggle(new GUIContent("Keep Search Text", "Keep previously entered search text"), EditorPrefs.GetBool(k_KeepSearchText));
-            var formatDefaultName = EditorGUILayout.Toggle(new GUIContent("Format default name", "Should the default name of the created So be formatted"), EditorPrefs.GetBool(k_FormatDefaultName));
+            var formatDefaultName = EditorGUILayout.Toggle(new GUIContent("Nicify default name", "Nicify default So name, for example _SoMoveData will be looked as So Move Data"), EditorPrefs.GetBool(k_FormatDefaultName));
             var width             = EditorGUILayout.IntField(new GUIContent("Width", "Window width"), EditorPrefs.GetInt(k_Width));
             var maxItems          = EditorGUILayout.IntField(new GUIContent("Max Items", "Max elements in popup window"), EditorPrefs.GetInt(k_MaxItems));
             
