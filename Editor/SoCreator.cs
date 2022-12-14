@@ -1,3 +1,5 @@
+#define HAS_SO_CREATOR
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,6 +11,7 @@ using UnityEditor.ShortcutManagement;
 using UnityEngine;
 using Assembly = System.Reflection.Assembly;
 using Object = UnityEngine.Object;
+
 
 namespace SoCreator
 {
@@ -101,7 +104,6 @@ namespace SoCreator
                                   }
                                   
                                   doCreateFile.ObjectType = pickedType;
-                                  
                                   ProjectWindowUtil.StartNameEditingIfProjectWindowExists(
                                       0,
                                       doCreateFile,
@@ -203,7 +205,38 @@ namespace SoCreator
             {
                 var path = SettingsProvider.s_TypeFolders.FirstOrDefault(typePath => isDerivedFrom(marker, typePath.Type));
                 if (path != null)
+                {
+                    if (SettingsProvider.s_IgnoreSubTypeFolder.Get<bool>() && IsSubPathOf())
+                        return string.Empty;
+                    
                     return AssetDatabase.GetAssetPath(path.Path);
+
+                    // -----------------------------------------------------------------------
+                    bool IsSubPathOf()
+                    {
+                        try
+                        {
+                            var getActiveFolderPath = typeof(ProjectWindowUtil).GetMethod("GetActiveFolderPath", BindingFlags.Static | BindingFlags.NonPublic);
+                            var projPath            = (string)getActiveFolderPath.Invoke(null, null);
+                            var pathDir             = new DirectoryInfo(AssetDatabase.GetAssetPath(path.Path));
+                            var projDir             = new DirectoryInfo(projPath);
+                            
+                            while (projDir.Parent != null)
+                            {
+                                if (projDir.Parent.FullName == pathDir.FullName)
+                                    return true;
+                                
+                                projDir = projDir.Parent;
+                            }
+                        }
+                        catch
+                        {
+                            // ignored
+                        }
+
+                        return false;
+                    }
+                }
             }
             
             return string.Empty;
