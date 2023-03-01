@@ -21,6 +21,7 @@ namespace SoCreator
         public const string k_PrefsPath         = "ProjectSettings\\" + k_PrefsFile;
         
         public static EditorOption s_IgnoreSubTypeFolder = new EditorOption("IgnoreSubTypeFolder");
+        public static EditorOption s_RequireMonoScript = new EditorOption("RequireMonoScript");
 
         public const bool k_AllAssambliesDefault     = false;
         public const bool k_ShowNamespaceDefault     = true;
@@ -223,8 +224,11 @@ namespace SoCreator
                 EditorPrefs.SetString(k_SearchText, string.Empty);
             
             s_IgnoreSubTypeFolder.Setup(true);
+            s_RequireMonoScript.Setup(false);
+            
         }
 
+        private static bool _advansed;
         public override void OnGUI(string searchContext)
         {
             //EditorGUILayout.ObjectField(null, typeof(AssemblyDefinitionAsset), false);
@@ -232,10 +236,24 @@ namespace SoCreator
             var allAssambles      = EditorGUILayout.Toggle(new GUIContent("All Assemblies", "Search in all assemblies by default"), EditorPrefs.GetBool(k_AllAssemblies));
             var showNamespace     = EditorGUILayout.Toggle(new GUIContent("Full Names", "Show namespace in type name"), EditorPrefs.GetBool(k_ShowNamespace));
             var keepSearchText    = EditorGUILayout.Toggle(new GUIContent("Keep Search Text", "Keep previously entered search text"), EditorPrefs.GetBool(k_KeepSearchText));
-            var formatDefaultName = EditorGUILayout.Toggle(new GUIContent("Nicify default name", "Nicify default So name, for example _SoMoveData will be looked as So Move Data"), EditorPrefs.GetBool(k_FormatDefaultName));
-            s_IgnoreSubTypeFolder.OnGui<bool>(val => EditorGUILayout.Toggle(new GUIContent("Ignore type path subfolder", "if So was created inside a subdirectory of type path, then type path relocation will be ignored"), val));
-            var width             = EditorGUILayout.IntField(new GUIContent("Width", "Window width"), EditorPrefs.GetInt(k_Width));
-            var maxItems          = EditorGUILayout.IntField(new GUIContent("Max Items", "Max elements in popup window"), EditorPrefs.GetInt(k_MaxItems));
+            s_RequireMonoScript.OnGui<bool>(val => EditorGUILayout.Toggle(new GUIContent("Require MonoScript", "Only show So types which have an associated MonoScript"), val));
+            
+            using (new EditorGUILayout.VerticalScope("Box"))
+            {
+                _advansed = EditorGUILayout.Foldout(_advansed, new GUIContent("Advanced"), true);
+                if (_advansed)
+                {
+                    EditorGUI.indentLevel ++;
+                    var formatDefaultName = EditorGUILayout.Toggle(new GUIContent("Nicify default name", "Nicify default So name, for example _SoMoveData will be looked as So Move Data"), EditorPrefs.GetBool(k_FormatDefaultName));
+                    s_IgnoreSubTypeFolder.OnGui<bool>(val => EditorGUILayout.Toggle(new GUIContent("Ignore subfolder path", "if So was created inside a subdirectory of type path, then type path relocation will be ignored"), val));
+                    var width    = EditorGUILayout.IntField(new GUIContent("Width", "Window width"), EditorPrefs.GetInt(k_Width));
+                    var maxItems = EditorGUILayout.IntField(new GUIContent("Max Items", "Max elements in popup window"), EditorPrefs.GetInt(k_MaxItems));
+                    EditorGUI.indentLevel --;
+                    EditorPrefs.SetBool(k_FormatDefaultName, formatDefaultName);
+                    EditorPrefs.SetInt(k_Width, Mathf.Max(width, PickerWindow.k_Width));
+                    EditorPrefs.SetInt(k_MaxItems, Mathf.Max(maxItems, 7));
+                }
+            }
             
             EditorGUILayout.Space(7);
             _getAssembliesList().DoLayoutList();
@@ -246,9 +264,6 @@ namespace SoCreator
                 EditorPrefs.SetBool(k_AllAssemblies, allAssambles);
                 EditorPrefs.SetBool(k_ShowNamespace, showNamespace);
                 EditorPrefs.SetBool(k_KeepSearchText, keepSearchText);
-                EditorPrefs.SetBool(k_FormatDefaultName, formatDefaultName);
-                EditorPrefs.SetInt(k_Width, Mathf.Max(width, PickerWindow.k_Width));
-                EditorPrefs.SetInt(k_MaxItems, Mathf.Max(maxItems, 7));
             }
         }
 
