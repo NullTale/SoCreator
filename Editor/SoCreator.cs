@@ -39,6 +39,8 @@ namespace SoCreator
             private void _create(string pathName)
             {
                 var so = ScriptableObject.CreateInstance(ObjectType);
+                while (AssetDatabase.GetMainAssetTypeAtPath(pathName + ".asset") != null)
+                    pathName = ObjectNames.GetUniqueName(new[] { pathName }, pathName);
                 
                 AssetDatabase.CreateAsset(so, Path.ChangeExtension(pathName, ".asset"));
                 ProjectWindowUtil.ShowCreatedAsset(so);
