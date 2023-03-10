@@ -81,6 +81,9 @@ namespace SoCreator
             PickerWindow.Show(picked =>
                               {
                                   var pickedType   = (Type)picked;
+                                  if (pickedType == null)
+                                      return;
+                                  
                                   var doCreateFile = ScriptableObject.CreateInstance<DoCreateFile>();
                                   var path = pickedType.Name;
                                   
