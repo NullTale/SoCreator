@@ -22,6 +22,10 @@ namespace SoCreator
         }
         
         // =======================================================================
+        public SoCreateAttribute() : this(true, true)
+        {
+        }
+        
         public SoCreateAttribute(bool visible, bool useForChildren = true)
         {
             Visibility = visible ? Mode.AlwaysVisible : Mode.Hidden;
