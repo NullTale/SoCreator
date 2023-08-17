@@ -66,12 +66,21 @@ namespace SoCreator
             var allAssemblies = (ignoreShift == false && GetGUIEvent()?.shift == true);
 
             var types = GetSoTypes(allAssemblies, type => type.IsAbstract == false && type.IsGenericTypeDefinition == false);
-
             if (types.Count == 0)
             {
                 Debug.Log("SoCreator: no visible ScriptableObject types was found");
                 return;
             }
+            
+            types.Sort((a, b) =>
+            {
+                var aAtr = a.GetCustomAttribute<SoCreateAttribute>();
+                var bAtr = b.GetCustomAttribute<SoCreateAttribute>();
+                var aPri = aAtr == null ? 0 : aAtr.Priority;
+                var bPri = bAtr == null ? 0 : bAtr.Priority;
+                
+                return aPri - bPri;
+            });
             
             var showNamespace     = EditorPrefs.GetBool(SettingsProvider.k_ShowNamespace);
             var keepSearchText    = EditorPrefs.GetBool(SettingsProvider.k_KeepSearchText);

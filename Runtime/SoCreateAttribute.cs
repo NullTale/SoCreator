@@ -11,6 +11,7 @@ namespace SoCreator
     {
         public Mode Visibility;
         public bool UseForChildren;
+        public int  Priority;
         
         // =======================================================================
         [Serializable]
@@ -22,18 +23,20 @@ namespace SoCreator
         }
         
         // =======================================================================
-        public SoCreateAttribute() : this(true, true)
+        public SoCreateAttribute() : this(true)
         {
         }
         
-        public SoCreateAttribute(bool visible, bool useForChildren = true)
+        public SoCreateAttribute(bool visible, bool useForChildren = true, int priority = 0)
         {
+            Priority = priority;
             Visibility = visible ? Mode.AlwaysVisible : Mode.Hidden;
             UseForChildren = useForChildren;
         }
         
-        public SoCreateAttribute(Mode visibility, bool useForChildren = true)
+        public SoCreateAttribute(Mode visibility, bool useForChildren = true, int priority = 0)
         {
+            Priority = priority;
             Visibility = visibility;
             UseForChildren = useForChildren;
         }
