@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+//  SoCreator © NullTale - https://twitter.com/NullTale/
 namespace SoCreator
 {
     /// <summary>

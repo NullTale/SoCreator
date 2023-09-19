@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
+//  SoCreator © NullTale - https://twitter.com/NullTale/
 namespace SoCreator
 {
     public static class InternalGUI

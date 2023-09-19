@@ -5,11 +5,10 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEditor.ProjectWindowCallback;
-using UnityEditor.ShortcutManagement;
 using UnityEngine;
 using Assembly = System.Reflection.Assembly;
 
-
+//  SoCreator © NullTale - https://twitter.com/NullTale/
 namespace SoCreator
 {
     public static class SoCreator

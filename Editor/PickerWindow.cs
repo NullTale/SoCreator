@@ -5,6 +5,7 @@ using System.Globalization;
 using UnityEditor;
 using UnityEngine;
 
+//  SoCreator © NullTale - https://twitter.com/NullTale/
 namespace SoCreator
 {
     public sealed class PickerWindow : EditorWindow

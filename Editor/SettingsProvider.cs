@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
+//  SoCreator © NullTale - https://twitter.com/NullTale/
 namespace SoCreator
 {
     public class SettingsProvider : UnityEditor.SettingsProvider
