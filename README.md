@@ -10,7 +10,7 @@ Quick access menu for ScriptableObjects creation by name.
 
 - Project specific search assemblies
 - Attribute object marking
-- Organization folders
+- Default folders for inherit types
 - Shortcuts
 
 ## Installation
@@ -23,8 +23,8 @@ https://github.com/NullTale/SoCreator.git
 
 ## Usage
 
-Create -> ScriptableObject or `Shift + I`<br>
-> Can be configured in detail in the Preferences window
+`Create -> ScriptableObject` or `Shift + I`<br>
+Edit -> Preferences | TypePath (default folders for created types)
 
 ![out](https://user-images.githubusercontent.com/1497430/191845515-311216d0-57c3-4294-8b69-0bf226fab911.gif)
 
@@ -35,4 +35,4 @@ Classes can be marked with `SoCreateAttribute` to manually define their visibili
 For each project, manually can be defined assemblies in which extra search will be performed by default.<br>
 Default folders can be specified for each ScriptableObject type. If such object or its derivative is created using a hotkey, it will automatically placed in the specified folder.
 
-![image](https://cdn.discordapp.com/attachments/934699103462494220/1081210636089970728/SoC.png)
+![image](https://github.com/NullTale/SoCreator/assets/1497430/7eeecd55-8e15-4168-adb4-6e6ebf462119)
