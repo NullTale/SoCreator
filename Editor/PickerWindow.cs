@@ -93,7 +93,11 @@ namespace SoCreator
             if (string.IsNullOrEmpty(searchText) == false)
                 window._onSearchTextChanged(searchText);
 
+#if UNITY_EDITOR_OSX
+            window.ShowModal();
+#else
             window.ShowPopup();
+#endif
         }
 
         private void Update()
