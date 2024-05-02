@@ -22,6 +22,8 @@ https://github.com/NullTale/SoCreator.git
 ![image](https://user-images.githubusercontent.com/1497430/181345613-b81a77c6-c449-4b19-ab1e-88b1ef06f6fc.png)
 
 -----
+Customization settings available in `Edit -> Preferences | SoCreator`
+
 * Classes can be marked with `SoCreateAttribute` to manually define their visibility.
 * `Default folders` can be specified for each ScriptableObject in type paths.
 * Shortcuts cat be configured in `Edit-> Shortcuts | Create/Scriptable Object`.
