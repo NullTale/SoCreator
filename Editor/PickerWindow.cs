@@ -39,6 +39,7 @@ namespace SoCreator
         private bool                 m_HoverObjectPicked;
         private bool                 m_Minimalistic;
         private bool                 m_InitializedPosition;
+        private int                  m_MaxElements;
 
         // =======================================================================
         public static void Show<T>(Action<object> onPicked, T selected, List<T> objects, int suggestions, Func<T, GUIContent> getLabel,
@@ -70,6 +71,7 @@ namespace SoCreator
             window.m_OnSeleceted       = onSelected;
             window.m_OnHover           = onHover;
             window.m_OnClose           = onClose;
+            window.m_MaxElements       = maxElements;
             window.position            = new Rect(0, 0, Mathf.Max(width, k_Width), Mathf.Min(objects.Count, maxElements) * (InternalGUI.ButtonStyle.fixedHeight) + 6 + (window.m_Minimalistic ? 0 : InternalGUI.SearchBarHeight) + InternalGUI.ScrollBarHeight);
             
             window.minSize = new Vector2(112, 20);
@@ -128,7 +130,7 @@ namespace SoCreator
                 case EventType.ExecuteCommand:
                 case EventType.ContextClick:
                     return;
-
+                
                 default:
                     break;
             }
@@ -196,6 +198,22 @@ namespace SoCreator
         private bool _checkInput()
         {
             var currentEvent = Event.current;
+            
+            if (currentEvent.type == EventType.ScrollWheel)
+            {
+                _offsetSelectedIndex(currentEvent.delta.y < 0f ? -1 : 1);
+                /*if (Labels.Count <= m_MaxElements)
+                {
+                    _offsetSelectedIndex(currentEvent.delta.y < 0f ? -1 : 1);
+                }
+                else
+                {
+                    m_ScrollPosition.y += currentEvent.delta.y * 100f;
+                }*/
+                
+                return true;
+            }
+            
             if (currentEvent.type == EventType.KeyDown)
             {
                 switch (currentEvent.keyCode)
