@@ -39,7 +39,7 @@ namespace SoCreator
                 while (AssetDatabase.GetMainAssetTypeAtPath(pathName + ".asset") != null)
                     pathName = ObjectNames.GetUniqueName(new[] { pathName }, pathName);
                 
-                AssetDatabase.CreateAsset(so, Path.ChangeExtension(pathName, ".asset"));
+                AssetDatabase.CreateAsset(so, pathName + ".asset");
                 ProjectWindowUtil.ShowCreatedAsset(so);
             }
         }
